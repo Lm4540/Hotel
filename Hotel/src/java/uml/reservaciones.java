@@ -14,8 +14,8 @@ import java.util.Date;
 public class reservaciones {
     int numero_habitacion;
     int id_huesped;
-    Date entrada;
-    Date salida;
+    String entrada;
+    String salida;
     String estado;
     Date fecha_reservacion;
     String comentarios;
@@ -23,7 +23,7 @@ public class reservaciones {
     public reservaciones() {
     }
 
-    public reservaciones(int numero_habitacion, int id_huesped, Date entrada, Date salida, String estado, Date fecha_reservacion, String comentarios) {
+    public reservaciones(int numero_habitacion, int id_huesped, String entrada, String salida, String estado, Date fecha_reservacion, String comentarios) {
         this.numero_habitacion = numero_habitacion;
         this.id_huesped = id_huesped;
         this.entrada = entrada;
@@ -41,11 +41,11 @@ public class reservaciones {
         return id_huesped;
     }
 
-    public Date getEntrada() {
+    public String getEntrada() {
         return entrada;
     }
 
-    public Date getSalida() {
+    public String getSalida() {
         return salida;
     }
 
@@ -60,6 +60,5 @@ public class reservaciones {
     public String getComentarios() {
         return comentarios;
     }
-    
     
 }

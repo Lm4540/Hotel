@@ -11,19 +11,22 @@ package uml;
  */
 public class habitaciones {
     private int numero;
+    private int piso;
     private String disponible;
     private int tipo;
-    private int piso;
+    
 
     public habitaciones() {
     }
 
-    public habitaciones(int numero, String disponible, int tipo, int piso) {
+    public habitaciones(int numero, int piso, String disponible, int tipo) {
         this.numero = numero;
+        this.piso = piso;
         this.disponible = disponible;
         this.tipo = tipo;
-        this.piso = piso;
     }
+
+    
 
     public int getPiso() {
         return piso;

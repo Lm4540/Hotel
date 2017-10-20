@@ -8,7 +8,7 @@ package modelo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import uml.usuarios;
+import uml.clientes;
 
 
 /**
@@ -17,27 +17,27 @@ import uml.usuarios;
  */
 public class DAOclientes implements Operaciones{
     
-usuarios us=new usuarios();
-    List<usuarios> datos = new ArrayList<>();
+clientes cliente=new clientes();
+    List<clientes> datos = new ArrayList<>();
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
     String sql="";
     Database db = new Database();
 
-    public DAObebidas() {       
+    public DAOclientes() {       
         try {Class.forName(db.getDriver());} catch (ClassNotFoundException e) {}
     }
        
   ///MOSTRAR DATOS
     @Override
-    public List<usuarios> consultar() {
-        sql="SELECT * FROM `users` ORDER BY `tipo`";
+    public List<clientes> consultar() {
+        sql="SELECT * FROM `clientes` order by nombre";
         try {
             con=DriverManager.getConnection(db.getUrl(), db.getUss(), db.getPass());
             pst=con.prepareStatement(sql);
             rs=pst.executeQuery();
-            while(rs.next()){datos.add(new usuarios(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
+            while(rs.next()){datos.add(new clientes(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));}
             con.close();
             rs.close();
         } catch (SQLException e) { }
@@ -46,15 +46,21 @@ usuarios us=new usuarios();
     //INSERTAR DATOS
  @Override
     public boolean insertar(Object obj) {
-        us = (usuarios) obj;
-        sql = "INSERT INTO `usuarios` (`email`, `tipo`, `contraseña`) VALUES (?, ?, ?)";
+        cliente = (clientes) obj;
+        if(cliente.getId_cliente()==0){
+        
+        }
+        
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
-            pst=con.prepareStatement(sql);
+                sql = "INSERT INTO `clientes` (`email`, `nombre`, `tipo_documento`, `numero_documento`) VALUES (?, ?, ?, ?)"; 
+                pst=con.prepareStatement(sql);
+                pst.setString(1, cliente.getEmail());
+                pst.setString(2, cliente.getNombre());
+                pst.setString(3, cliente.getTipo_documento());
+                pst.setString(4, cliente.getNumero_documento());
+               
             
-            pst.setString(1, us.getEmail());
-            pst.setString(2, us.getTipo());
-            pst.setString(3, us.getContraseña());
             
             int filas = pst.executeUpdate();
             return filas>0;
@@ -64,18 +70,18 @@ usuarios us=new usuarios();
     //MODIFICAR
  @Override
     public boolean modificar(Object obj) {
-        us = (usuarios) obj;
-        sql = "UPDATE `usuarios` SET `email` = ?, `tipo` = ?, `contraseña` = ? WHERE `usuarios`.`email` = ?";
+        cliente = (clientes) obj;
+       
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
-            pst=con.prepareStatement(sql);
             
-            pst.setString(1, us.getEmail());
-            pst.setString(3, us.getContraseña());
-            pst.setString(2, us.getTipo());
-            pst.setString(4, us.getEmail());
-            
-
+                sql="UPDATE `clientes` SET `email` = ?, `nombre` = ?, `tipo_documento` = ?, `numero_documento` = ? WHERE `clientes`.`id_cliente` = ?"; 
+                pst=con.prepareStatement(sql);
+                pst.setString(1, cliente.getEmail());
+                pst.setString(2, cliente.getNombre());
+                pst.setString(3, cliente.getTipo_documento());
+                pst.setString(4, cliente.getNumero_documento());
+                pst.setInt(5, cliente.getId_cliente());
             int filas = pst.executeUpdate();
             return filas > 0;
         } catch (SQLException e) {return false;}
@@ -84,12 +90,12 @@ usuarios us=new usuarios();
     //ELIMINAR
  @Override
     public boolean eliminar(Object obj) {
-        us= (usuarios) obj;
-        sql = "DELETE FROM `usuarios` WHERE `usuarios`.`email` = ?";
+        cliente= (clientes) obj;
+        sql = "DELETE FROM `clientes` WHERE `clientes`.`id_cliente` = ?";
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);
-            pst.setString(1, us.getEmail());
+            pst.setInt(1, cliente.getId_cliente());
             int filas = pst.executeUpdate();
             return filas>0;
         } catch (SQLException e) {return false; }
@@ -98,14 +104,14 @@ usuarios us=new usuarios();
     
     //FILTRAR
     @Override
-    public List<usuarios> filtrar(String campo, String valor) {
-        sql="select * from usuarios where "+campo+" like '%"+valor+"%'";
+    public List<clientes> filtrar(String campo, String valor) {
+        sql="select * from clientes where "+campo+" like '%"+valor+"%'";
         try {
             
             con=DriverManager.getConnection(db.getUrl(), db.getUss(), db.getPass());
             pst=con.prepareStatement(sql);
             rs=pst.executeQuery();
-            while(rs.next()){datos.add(new usuarios(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
+            while(rs.next()){datos.add(new clientes(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));}
             con.close();
             rs.close();
         } catch (SQLException e) { }

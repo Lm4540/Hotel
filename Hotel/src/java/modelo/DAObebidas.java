@@ -5,7 +5,7 @@
  */
 package modelo;
 import java.sql.*;
-import uml.usuarios;
+import uml.bebidas;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class DAObebidas implements Operaciones{
     
-usuarios us=new usuarios();
-    List<usuarios> datos = new ArrayList<>();
+bebidas bebida=new bebidas();
+    List<bebidas> datos = new ArrayList<>();
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
@@ -28,13 +28,13 @@ usuarios us=new usuarios();
        
   ///MOSTRAR DATOS
     @Override
-    public List<usuarios> consultar() {
-        sql="SELECT * FROM `users` ORDER BY `tipo`";
+    public List<bebidas> consultar() {
+        sql="SELECT * FROM `bebidas`";
         try {
             con=DriverManager.getConnection(db.getUrl(), db.getUss(), db.getPass());
             pst=con.prepareStatement(sql);
             rs=pst.executeQuery();
-            while(rs.next()){datos.add(new usuarios(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
+            while(rs.next()){datos.add(new bebidas(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
             con.close();
             rs.close();
         } catch (SQLException e) { }
@@ -43,15 +43,15 @@ usuarios us=new usuarios();
     //INSERTAR DATOS
  @Override
     public boolean insertar(Object obj) {
-        us = (usuarios) obj;
-        sql = "INSERT INTO `usuarios` (`email`, `tipo`, `contraseña`) VALUES (?, ?, ?)";
+        bebida = (bebidas) obj;
+        sql = "INSERT INTO `bebidas` (`imagen`, `titulo`, `descripcion`) VALUES (?,?,?)";
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);
             
-            pst.setString(1, us.getEmail());
-            pst.setString(2, us.getTipo());
-            pst.setString(3, us.getContraseña());
+            pst.setString(1, bebida.getImagen());
+            pst.setString(2, bebida.getTitulo());
+            pst.setString(3, bebida.getDescipcion());
             
             int filas = pst.executeUpdate();
             return filas>0;
@@ -61,16 +61,16 @@ usuarios us=new usuarios();
     //MODIFICAR
  @Override
     public boolean modificar(Object obj) {
-        us = (usuarios) obj;
-        sql = "UPDATE `usuarios` SET `email` = ?, `tipo` = ?, `contraseña` = ? WHERE `usuarios`.`email` = ?";
+        bebida = (bebidas) obj;
+        sql = "UPDATE `bebidas` SET `imagen` = ?, `titulo` = ?, `descripcion` = ? WHERE `bebidas`.`id_bebida` = ?";
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);
             
-            pst.setString(1, us.getEmail());
-            pst.setString(3, us.getContraseña());
-            pst.setString(2, us.getTipo());
-            pst.setString(4, us.getEmail());
+            pst.setString(1, bebida.getImagen());
+            pst.setString(3, bebida.getDescipcion());
+            pst.setString(2, bebida.getTitulo());
+            pst.setInt(4, bebida.getId_bebida());
             
 
             int filas = pst.executeUpdate();
@@ -81,12 +81,12 @@ usuarios us=new usuarios();
     //ELIMINAR
  @Override
     public boolean eliminar(Object obj) {
-        us= (usuarios) obj;
-        sql = "DELETE FROM `usuarios` WHERE `usuarios`.`email` = ?";
+        bebida= (bebidas) obj;
+        sql = "DELETE FROM `bebidas` WHERE `bebidas`.`id_bebida` = ?";
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);
-            pst.setString(1, us.getEmail());
+            pst.setInt(1, bebida.getId_bebida());
             int filas = pst.executeUpdate();
             return filas>0;
         } catch (SQLException e) {return false; }
@@ -95,14 +95,14 @@ usuarios us=new usuarios();
     
     //FILTRAR
     @Override
-    public List<usuarios> filtrar(String campo, String valor) {
-        sql="select * from usuarios where "+campo+" like '%"+valor+"%'";
+    public List<bebidas> filtrar(String campo, String valor) {
+        sql="select * from bebidas where "+campo+" like '%"+valor+"%'";
         try {
             
             con=DriverManager.getConnection(db.getUrl(), db.getUss(), db.getPass());
             pst=con.prepareStatement(sql);
             rs=pst.executeQuery();
-            while(rs.next()){datos.add(new usuarios(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
+            while(rs.next()){datos.add(new bebidas(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));}
             con.close();
             rs.close();
         } catch (SQLException e) { }

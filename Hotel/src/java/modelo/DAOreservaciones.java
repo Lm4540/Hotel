@@ -22,7 +22,7 @@ usuarios us=new usuarios();
     String sql="";
     Database db = new Database();
 
-    public DAObebidas() {       
+    public DAOreservaciones() {       
         try {Class.forName(db.getDriver());} catch (ClassNotFoundException e) {}
     }
        
@@ -44,7 +44,7 @@ usuarios us=new usuarios();
  @Override
     public boolean insertar(Object obj) {
         us = (usuarios) obj;
-        sql = "INSERT INTO `usuarios` (`email`, `tipo`, `contraseña`) VALUES (?, ?, ?)";
+        sql = "INSERT INTO `reservaciones` (`numero_habitacion`, `id_huesped`, `entrada`, `salida`, `estado`, `fecha_reservacion`, `comentarios`) VALUES ('1', '1', '2017-10-12 12:17:21', '2017-10-12 12:17:21', 'pendiente', CURRENT_TIMESTAMP, 'comentario')";
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);

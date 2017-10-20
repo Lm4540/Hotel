@@ -30,7 +30,7 @@ public class DAOUsuarios implements Operaciones{
   ///MOSTRAR DATOS
     @Override
     public List<usuarios> consultar() {
-        sql="SELECT * FROM `users` ORDER BY `tipo`";
+        sql="SELECT * FROM `usuarios`";
         try {
             con=DriverManager.getConnection(db.getUrl(), db.getUss(), db.getPass());
             pst=con.prepareStatement(sql);
@@ -45,14 +45,23 @@ public class DAOUsuarios implements Operaciones{
  @Override
     public boolean insertar(Object obj) {
         us = (usuarios) obj;
-        sql = "INSERT INTO `usuarios` (`email`, `tipo`, `contraseña`) VALUES (?, ?, ?)";
+        
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
-            pst=con.prepareStatement(sql);
-            
-            pst.setString(1, us.getEmail());
-            pst.setString(2, us.getTipo());
-            pst.setString(3, us.getContraseña());
+            if(us.getId_usuario()==0){
+                sql = "INSERT INTO `usuarios` (`id_usuario`, `email`, `tipo`, `contraseña`) VALUES (NULL, ?, ?, ?)";
+                pst=con.prepareStatement(sql);
+                pst.setString(1, us.getEmail());
+                pst.setString(2, us.getTipo());
+                pst.setString(3, us.getContraseña());
+            }else{
+                sql = "INSERT INTO `usuarios` (`id_usuario`, `email`, `tipo`, `contraseña`) VALUES (?, ?, ?, ?)";
+                pst=con.prepareStatement(sql);
+                pst.setInt(1, us.getId_usuario());
+                pst.setString(2, us.getEmail());
+                pst.setString(3, us.getTipo());
+                pst.setString(4, us.getContraseña());
+            }
             
             int filas = pst.executeUpdate();
             return filas>0;
@@ -64,6 +73,7 @@ public class DAOUsuarios implements Operaciones{
     public boolean modificar(Object obj) {
         us = (usuarios) obj;
         sql = "UPDATE `usuarios` SET `email` = ?, `tipo` = ?, `contraseña` = ? WHERE `usuarios`.`email` = ?";
+        
         try {
             con=DriverManager.getConnection(db.getUrl(),db.getUss(),db.getPass());
             pst=con.prepareStatement(sql);
